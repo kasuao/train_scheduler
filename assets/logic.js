@@ -23,7 +23,7 @@
 	//add name
 	$("#submit").on("click", function(){
 
-
+		console.log("Your submit button is working");
 		//input name is equal to var name
 		var name = $("#name").val().trim();
 		console.log(name);
@@ -36,14 +36,15 @@
 		//add frequency
 		var frequency = $("#Frequency").val().trim();
 		console.log(frequency);
-		//app must calculate when next train will arrive
-		var arrival = function(){
-			//relative to current time
-			var currentTime = date();
-			console.log("Your current time is: " + currentTime);
-			
-		}
-
+		//Current time
+		var currentTime = Date();
+		console.log("Your current time is: " + currentTime);
+		//find the difference from first train time and current time
+		var timeDiff = moment(time, currentTime).fromNow();
+		console.log(timeDiff);
+		//arrival time is equal to
+		var arrival = timeDiff/frequency;
+		console.log(arrival);
 		//store data on firebase
 		database.ref().push({
 			trainName: name,
@@ -56,15 +57,13 @@
 			//retrieve all this info and show it in the table
 		database.ref().on("child_added", function(childSnapshot){
 			//logs it in the console for testing...IT WORKS!
-			console.log(childSnapshot.val());
+			// console.log(childSnapshot.val());
 			console.log(childSnapshot.val().trainName);
 			console.log(childSnapshot.val().Destination);
 			console.log(childSnapshot.val().firstTrainTime);
 			console.log(childSnapshot.val().Frequency);
 			//this code displays it in the table
-			$(".name").html(childSnapshot.val().trainName);
-			$(".destin").html(childSnapshot.val().Destination);
-			$(".frequency").html(childSnapshot.val().Frequency);
+			$("#newTrain").prepend("<tr><td>" + childSnapshot.val().trainName + "</td>" + "<td>" + childSnapshot.val().Destination + "</td>" + "<td>" + childSnapshot.val().Frequency + "</td>" +"<td>" + childSnapshot.val().arrival + "</td>" + "<td>" + "minutes away" + "</td>");
 		})
 			
 	});
