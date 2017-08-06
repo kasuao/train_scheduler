@@ -37,13 +37,14 @@
 		var frequency = $("#Frequency").val().trim();
 		console.log(frequency);
 		//Current time
-		var currentTime = Date();
+		var currentTime = moment().format('HH:MM');
 		console.log("Your current time is: " + currentTime);
+		//need to translate currentTime into 20120620 format
 		//find the difference from first train time and current time
 		var timeDiff = moment(time, currentTime).fromNow();
 		console.log(timeDiff);
 		//arrival time is equal to
-		var arrival = timeDiff/frequency;
+		var arrival = timeDiff%frequency;
 		console.log(arrival);
 		//store data on firebase
 		database.ref().push({
